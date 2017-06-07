@@ -1,4 +1,4 @@
-package XiaoLineScan;
+package XLineScan;
 
 import ij.ImagePlus;
 import ij.IJ;

@@ -1,4 +1,4 @@
-package XiaoLineScan;
+package XLineScan;
 
 import AiSpindle.PointPair;
 import AiSpindle.SpindleContourAnalyzer;
@@ -50,6 +50,7 @@ public class XROIPickUpWindow implements Runnable {
     private void showWindow() {
         imageWd = new StackWindow(IJ.openImage(FileName));
         ImagePlus imp = imageWd.getImagePlus();
+        imageWd.setVisible(true);
 
         if (RunningLineScanWorker.getUseAutoDetection()) {
             Overlay overlay = autoDetection(imp);
@@ -71,8 +72,6 @@ public class XROIPickUpWindow implements Runnable {
                 RunningLineScanWorker.resumeWorker();
             }
         });
-
-        imageWd.setVisible(true);
         IJ.setTool(Toolbar.LINE);
         roiList.setLocation(imageWd.getLocation().x + imageWd.getWidth(), imageWd.getLocation().y);
         roiList.setVisible(true);

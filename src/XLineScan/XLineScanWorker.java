@@ -2,14 +2,13 @@
  * Here comes the text of your license
  * Each line should be prefixed with  * 
  */
-package XiaoLineScan;
+package XLineScan;
 
 import ij.IJ;
 import ij.gui.Roi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

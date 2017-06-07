@@ -2,7 +2,7 @@
  * Here comes the text of your license
  * Each line should be prefixed with  * 
  */
-package XiaoLineScan;
+package XLineScan;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -146,7 +146,7 @@ public class RoiListManager extends javax.swing.JFrame {
             imp.deleteRoi();
 
         }
-        if (evt.getClickCount() == 2) {
+       // if (evt.getClickCount() == 2) {
             addBn.setText("Accept");
             editingIndex = roiDisplayList.locationToIndex(evt.getPoint());
             String name = listModel.get(editingIndex);
@@ -154,7 +154,7 @@ public class RoiListManager extends javax.swing.JFrame {
             imp.setRoi(roi, true);
             ovl.remove(roi);
 
-        }
+       // }
 
         imp.setOverlay(ovl);
 
@@ -199,6 +199,16 @@ public class RoiListManager extends javax.swing.JFrame {
     }//GEN-LAST:event_addBnActionPerformed
 
     private void doneBnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneBnActionPerformed
+        if (editingIndex != -1) {
+            addBn.setText("Add");
+            String name = listModel.getElementAt(editingIndex);
+            Roi roi = imp.getRoi();
+            roiMap.replace(name, roi);
+            ovl.add(roi);
+            editingIndex=-1;
+            imp.deleteRoi();
+
+        }        
         imageWd.dispatchEvent(new WindowEvent(imageWd, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_doneBnActionPerformed
 

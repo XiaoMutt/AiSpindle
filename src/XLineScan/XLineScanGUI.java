@@ -1,4 +1,4 @@
-package XiaoLineScan;
+package XLineScan;
 
 import ij.IJ;
 import ij.ImageJ;
@@ -323,8 +323,10 @@ public class XLineScanGUI extends javax.swing.JFrame {
                         if (results != null) {
                             results.drawPlots();
                         }
-                    } catch (InterruptedException | ExecutionException ex) {
+                    } catch (InterruptedException ex) {
                         IJ.log("ERROR: Run was interrupted");
+                    }catch(ExecutionException ex){
+                        IJ.log("ERROR: Run error: "+ ex.getMessage());
                     }
                 } else if (evt1.getPropertyName().equals("Paused")) {
                     xrpw = (XROIPickUpWindow) evt1.getNewValue();
