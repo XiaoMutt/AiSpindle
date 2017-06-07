@@ -3,9 +3,7 @@ package XiaoLineScan;
 import ij.IJ;
 import ij.ImageJ;
 import ij.io.DirectoryChooser;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -369,7 +367,10 @@ public class XLineScanGUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new ImageJ(ImageJ.EMBEDDED).setVisible(true);
+            ImageJ imj = new ImageJ(ImageJ.EMBEDDED);
+            imj.exitWhenQuitting(true);
+            imj.setVisible(true);
+
             new XLineScanGUI().setVisible(true);
 
         });
