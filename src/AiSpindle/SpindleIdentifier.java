@@ -2,6 +2,7 @@ package AiSpindle;
 
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.plugin.filter.GaussianBlur;
 import ij.process.ImageConverter;
 import java.awt.Polygon;
 import java.util.ArrayList;
@@ -19,14 +20,14 @@ public class SpindleIdentifier {
 
     public SpindleIdentifier(ImagePlus imagePlus, int mtChannel, int dnaChannel) {
         spindles = new ArrayList<>();
-        imagePlus = imagePlus.duplicate();
-
-        ImageConverter ic = new ImageConverter(imagePlus);
-        ic.convertToGray8();
-
         ImageStack imageStack = imagePlus.getImageStack();
         mtImp = new ImagePlus("mt", imageStack.getProcessor(mtChannel));
         dnaImp = new ImagePlus("dna", imageStack.getProcessor(dnaChannel));
+        
+        new ImageConverter(mtImp).convertToGray8();
+        new GaussianBlur().blurGaussian(mtImp.getChannelProcessor(), 2);        
+        new ImageConverter(dnaImp).convertToGray8();
+        new GaussianBlur().blurGaussian(dnaImp.getChannelProcessor(), 2);
 
         MicrotubuleBlobs mb = new MicrotubuleBlobs(mtImp);
         DNABlobs db = new DNABlobs(dnaImp);

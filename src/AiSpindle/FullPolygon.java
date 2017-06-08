@@ -266,7 +266,7 @@ public class FullPolygon {
         for (Integer yi : mapYXI.keySet()) {
             treeMap = mapYXI.get(yi);
             Integer[] keys = treeMap.keySet().toArray(new Integer[treeMap.size()]);
-            if (keys.length > 1) {
+            if (keys.length > 1 ) {
                 for (int k = 1; k < keys.length; k++) {
                     int i = treeMap.get(keys[k]), j = treeMap.get(keys[k - 1]);
                     int dx = Math.abs(keys[k] - keys[k - 1]);

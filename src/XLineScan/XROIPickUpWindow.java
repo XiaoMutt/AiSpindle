@@ -79,7 +79,8 @@ public class XROIPickUpWindow implements Runnable {
     }
 
     private Overlay autoDetection(ImagePlus imp) {
-        SpindleIdentifier si = new SpindleIdentifier(imp, RunningLineScanWorker.getMtchannel(), RunningLineScanWorker.getMtchannel());
+        ImagePlus imp2=imp.duplicate();
+        SpindleIdentifier si = new SpindleIdentifier(imp, RunningLineScanWorker.getMtchannel(), RunningLineScanWorker.getDnachannel());
         Overlay overlay = new Overlay();
         List<SpindleContourAnalyzer> spindles = si.getSpindles();
         for (SpindleContourAnalyzer s : spindles) {

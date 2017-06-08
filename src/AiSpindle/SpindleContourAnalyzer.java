@@ -1,6 +1,5 @@
 package AiSpindle;
 
-import ij.IJ;
 import ij.ImagePlus;
 import java.awt.Polygon;
 import java.util.ArrayList;
