@@ -1,4 +1,4 @@
-/*
+/* use ij-blob
  * for documents of ij-blob see:
  * http://www.atetric.com/atetric/javadoc/de.biomedical-imaging.ij/ij_blob/1.4.8/
  */
