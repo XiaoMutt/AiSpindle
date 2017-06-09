@@ -25,8 +25,10 @@ public class SpindleIdentifier {
         dnaImp = new ImagePlus("dna", imageStack.getProcessor(dnaChannel));
         
         new ImageConverter(mtImp).convertToGray8();
-        new GaussianBlur().blurGaussian(mtImp.getChannelProcessor(), 2);        
+        RubberBandBaseLineCorrecter.CorrectBaseline(mtImp.getProcessor());
+        new GaussianBlur().blurGaussian(mtImp.getChannelProcessor(), 2);      
         new ImageConverter(dnaImp).convertToGray8();
+        RubberBandBaseLineCorrecter.CorrectBaseline(dnaImp.getProcessor());
         new GaussianBlur().blurGaussian(dnaImp.getChannelProcessor(), 2);
 
         MicrotubuleBlobs mb = new MicrotubuleBlobs(mtImp);

@@ -2,8 +2,11 @@ package XLineScan;
 
 import ij.IJ;
 import ij.ImageJ;
+import ij.gui.Roi;
 import ij.io.DirectoryChooser;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -12,11 +15,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class XLineScanGUI extends javax.swing.JFrame {
 
-    private XROIPickUpWindow xrpw;
-
-    public void setXrpw(XROIPickUpWindow xrpw) {
-        this.xrpw = xrpw;
-    }
+    XRoiPickUpWindow xrpw;
 
     /**
      * Creates new form XLineScanGUI
@@ -296,7 +295,7 @@ public class XLineScanGUI extends javax.swing.JFrame {
 
     private void runBnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runBnActionPerformed
         XLineScanWorker lineScanWorker = new XLineScanWorker();
-        if ("Run".equals(runBn.getText())) {
+         if ("Run".equals(runBn.getText())) {
             runBn.setText("Cancel");
             lineScanWorker.setOpenFolder(openFolderTf.getText());
             lineScanWorker.setNumeratorChannelIndex(Integer.parseInt(numeratorChannelCb.getSelectedItem().toString()));
@@ -314,7 +313,9 @@ public class XLineScanGUI extends javax.swing.JFrame {
             lineScanWorker.setDnachannel(Integer.parseInt(dnaChannelCb.getSelectedItem().toString()));
 
             lineScanWorker.addPropertyChangeListener((PropertyChangeEvent evt1) -> {
+
                 if (lineScanWorker.isCancelled()) {
+                    IJ.log("INFO: XLineScan canncelled");
                     runBn.setText("Run");
                 } else if (lineScanWorker.isDone()) {
                     try {
@@ -323,24 +324,28 @@ public class XLineScanGUI extends javax.swing.JFrame {
                         if (results != null) {
                             results.drawPlots();
                         }
+                        IJ.log("INFO: XLineScan completed");
                     } catch (InterruptedException ex) {
-                        IJ.log("ERROR: Run was interrupted");
-                    }catch(ExecutionException ex){
-                        IJ.log("ERROR: Run error: "+ ex.getMessage());
+                        IJ.log("ERROR: Run interrupted: " + ex.getMessage());
+                    } catch (ExecutionException ex) {
+                        IJ.log("ERROR: Run error: " + ex.getMessage());
                     }
-                } else if (evt1.getPropertyName().equals("Paused")) {
-                    xrpw = (XROIPickUpWindow) evt1.getNewValue();
-                } else if (evt1.getPropertyName().equals("Resumed")) {
-                    xrpw = null;
+                } else if (evt1.getPropertyName().equals("PausedAt")) {
+                    String pausedAt = (String) evt1.getNewValue();
+                    xrpw = new XRoiPickUpWindow(pausedAt, lineScanWorker, lineScanWorker.getUseAutoDetection(), lineScanWorker.getMtchannel(), lineScanWorker.getDnachannel());
+                    xrpw.setVisible(true);
+
                 }
             });
 
             lineScanWorker.execute();
+
         } else {
             if (xrpw != null) {
-                xrpw.close();
+                xrpw.canel();
+            } else {
+                lineScanWorker.cancel(true);
             }
-
         }
     }//GEN-LAST:event_runBnActionPerformed
 

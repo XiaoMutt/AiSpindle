@@ -1,12 +1,11 @@
 package AiSpindle;
 
 import ij.ImagePlus;
-import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 
 /**
  *
- * @author ImageJ Autothresholder modified by Xiao Zhou from ImageJ source code
+ * @author N/A ImageJ Autothresholder modified by Xiao Zhou from ImageJ source code
  * Convert the image to 8-bit gray scale and apply Yen Autothresholder to an
  * ImagePlus object
  *

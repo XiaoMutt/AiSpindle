@@ -7,20 +7,20 @@ package XLineScan;
 import ij.ImagePlus;
 import ij.gui.Overlay;
 import ij.gui.Roi;
-import ij.gui.StackWindow;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
 
 /**
  *
- * @author Mutt
+ * @author Xiao Zhou
  */
 public class RoiListManager extends javax.swing.JFrame {
 
-    private final HashMap<String, Roi> roiMap = new HashMap<>();
+    private final HashMap<String, Roi> roiMap=new HashMap<>();
     private final ImagePlus imp;
-    private final StackWindow imageWd;
+    private final XRoiPickUpWindow imageWd;
     private final Overlay ovl;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private int editingIndex = -1;
@@ -28,12 +28,12 @@ public class RoiListManager extends javax.swing.JFrame {
     /**
      * Creates new form RoiListManager
      *
-     * @param imagePlus
      * @param imageWindow
+     * @param pickedRois
      */
-    public RoiListManager(ImagePlus imagePlus, StackWindow imageWindow) {
+    public RoiListManager(XRoiPickUpWindow imageWindow) {
         initComponents();
-        imp = imagePlus;
+        imp = imageWindow.getImagePlus();
         imageWd=imageWindow;
         if (imp.getOverlay() != null) {
             ovl = imp.getOverlay();
@@ -51,6 +51,14 @@ public class RoiListManager extends javax.swing.JFrame {
             listModel.addElement(name);
             i++;
         }
+    }
+    
+    public ArrayList<Roi> getRois(){
+        ArrayList<Roi> pickedRois=new ArrayList<>();
+        for(String key: roiMap.keySet()){
+            pickedRois.add(roiMap.get(key));
+        }       
+        return pickedRois;
     }
 
     /**
@@ -208,7 +216,8 @@ public class RoiListManager extends javax.swing.JFrame {
             editingIndex=-1;
             imp.deleteRoi();
 
-        }        
+        }
+
         imageWd.dispatchEvent(new WindowEvent(imageWd, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_doneBnActionPerformed
 

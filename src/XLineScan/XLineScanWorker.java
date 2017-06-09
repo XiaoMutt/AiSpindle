@@ -9,10 +9,10 @@ import ij.gui.Roi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 /**
@@ -28,11 +28,7 @@ public class XLineScanWorker extends SwingWorker<XLineScanResult, String> {
     private int DenominatorBackgroundValue;
     private int mtchannel;
     private int dnachannel;
-    private XROIPickUpWindow rpuw = null;
-
-    public XROIPickUpWindow getRpuw() {
-        return rpuw;
-    }
+    private ArrayList<Roi> pickedRois;
 
     public int getMtchannel() {
         return mtchannel;
@@ -61,7 +57,6 @@ public class XLineScanWorker extends SwingWorker<XLineScanResult, String> {
     private double[][] XMean;//0 is Normalized Numerator Values; 1 is Normalized Denominator Values; 2 is Normalized Ratio Values;
     private double[][] Xi2Sum;//0 is Normalized Numerator Values; 1 is Normalized Denominator Values; 2 is Normalized Ratio Values;
     private double[][] SD;//0 is Normalized Numerator Values; 1 is Normalized Denominator Values; 2 is Normalized Ratio Values;
-    private volatile XROIPickUpWindow Paused;
 
     public void setUseAutoDetection(boolean useAutoDetection) {
         this.useAutoDetection = useAutoDetection;
@@ -115,22 +110,21 @@ public class XLineScanWorker extends SwingWorker<XLineScanResult, String> {
         ROILineWidth = roiLineWidth;
     }
 
-    public synchronized void pauseWorker() {
-        firePropertyChange("Paused", Paused, rpuw);
-        Paused = rpuw;
-        while (Paused != null) {
-            try {
-                wait();
-            } catch (InterruptedException ex) {
-                publish("WARINING: processing is canceled");
-            }
+    public synchronized void pauseWorker(String fileName) {
+        firePropertyChange("PausedAt", "", fileName);
+
+        try {
+            wait();
+        } catch (InterruptedException ex) {
+            publish("WARINING: processing is canceled");
         }
+
     }
 
-    public synchronized void resumeWorker() {
-        firePropertyChange("Resumed", Paused, null);
-        Paused = null;
-        notify();
+    public synchronized void resumeWorker(ArrayList<Roi> pickedRois) {
+        //firePropertyChange("ResumedWith", "", pickedRois);
+        this.pickedRois=pickedRois;
+        notify();        
     }
 
     private void processImage(String filePath) {
@@ -154,10 +148,9 @@ public class XLineScanWorker extends SwingWorker<XLineScanResult, String> {
         if (rois == null) {
 
             publish("INFO: manually choose ROI");
-            rpuw = new XROIPickUpWindow(filePath, this);
-            SwingUtilities.invokeLater(rpuw);
-            pauseWorker();
-            if ((rois = rpuw.obtainPickedROIs()) != null) {
+            pauseWorker(filePath);
+            
+            if ((rois = pickedRois.toArray(new Roi[pickedRois.size()])) != null) {
                 publish("INFO: " + rois.length + (rois.length < 2 ? " ROI is" : " ROIs are") + " added");
                 xip.saveROIs(rois, filePath);
             } else {

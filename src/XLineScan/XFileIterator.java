@@ -28,7 +28,7 @@ public class XFileIterator {
      */
     public XFileIterator(String path) {
         File working_folder = new File(path);
-        ArrayList<File> file_list = new ArrayList(Arrays.asList(working_folder.listFiles()));
+        ArrayList<File> file_list = new ArrayList<>(Arrays.asList(working_folder.listFiles()));
         FileIterator = file_list.iterator();
         DaughterFileIterator = null;
     }
@@ -40,7 +40,7 @@ public class XFileIterator {
      * @param path full path of the target folder
      */
     private XFileIterator(File currentFile) {
-        ArrayList<File> file_list = new ArrayList(Arrays.asList(currentFile.listFiles()));
+        ArrayList<File> file_list = new ArrayList<>(Arrays.asList(currentFile.listFiles()));
         FileIterator = file_list.iterator();
         DaughterFileIterator = null;
     }

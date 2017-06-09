@@ -28,7 +28,7 @@ public class XDataSaver {
     public XDataSaver(String fileName) throws FileNotFoundException {
         FileOut = new FileOutputStream(fileName);
         XWorkbook = new XSSFWorkbook();
-        XSheet = new ArrayList();
+        XSheet = new ArrayList<>();
         XSheet.add(XWorkbook.createSheet("Numerator Raw Profiles"));
         XSheet.add(XWorkbook.createSheet("Denominator Raw Profiles"));
         XSheet.add(XWorkbook.createSheet("Raw Ratio Profiles"));
