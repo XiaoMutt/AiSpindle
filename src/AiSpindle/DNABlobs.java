@@ -21,7 +21,7 @@ public class DNABlobs extends BlobFilter {
 
         //DNA channel filter params;
         filterParams.add(new BlobFilterParam(Blob.GETCIRCULARITY, 4 * Math.PI, 600));
-        filterParams.add(new BlobFilterParam(Blob.GETENCLOSEDAREA, Math.max(1e-4 * area, 5), Math.max(0.5 * area, 15)));
+        filterParams.add(new BlobFilterParam(Blob.GETENCLOSEDAREA, Math.max(3e-4 * area, 100), Math.max(0.5 * area, 15)));
         filterAndSmoothBlobs();
     }
 
