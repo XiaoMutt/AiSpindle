@@ -21,32 +21,33 @@ import ij.plugin.filter.BackgroundSubtracter;
  */
 public class XImageProcessor {
 
-    private final ImagePlus ImgPls;
-    private final boolean[] BackgroundProcessed;
-    private double ROILineWidth;
-    private final Overlay ImageOverlay;
-    private Object FilenameUtils;
+    private final ImagePlus imagePlus;
+    private final ImagePlus originalImp;
+    private final boolean[] backgroundProcessed;
+    private double roiLineWidth;
+    private final Overlay imageOverlay;
 
     public XImageProcessor(String fileName) {
-        ImgPls = IJ.openImage(fileName);
-        ImageOverlay = new Overlay();
-        int n = ImgPls.getNChannels();
-        BackgroundProcessed = new boolean[n];
+        originalImp = IJ.openImage(fileName);
+        imagePlus=originalImp.duplicate();
+        imageOverlay = new Overlay();
+        int n = imagePlus.getNChannels();
+        backgroundProcessed = new boolean[n];
         for (int i = 0; i < n; i++) {
-            BackgroundProcessed[i] = false;
+            backgroundProcessed[i] = false;
         }
     }
 
     public void setROILineWidth(double width) {
-        ROILineWidth = width;
+        roiLineWidth = width;
     }
 
     public boolean subtractBackgroundByRollingBall(int radius, int channel) {
-        if (BackgroundProcessed[channel - 1] == false && radius > 0) {
-            ImgPls.setC(channel);
+        if (backgroundProcessed[channel - 1] == false && radius > 0) {
+            imagePlus.setC(channel);
             BackgroundSubtracter bgs = new BackgroundSubtracter();
-            bgs.rollingBallBackground(ImgPls.getProcessor(), radius, false, false, false, false, false);
-            BackgroundProcessed[channel - 1] = true;
+            bgs.rollingBallBackground(imagePlus.getProcessor(), radius, false, false, false, false, false);
+            backgroundProcessed[channel - 1] = true;
             return true;
         } else {
             return false;
@@ -54,10 +55,10 @@ public class XImageProcessor {
     }
 
     public boolean subtractCertainBackground(int backgroundValue, int channel) {
-        if (BackgroundProcessed[channel - 1] == false && backgroundValue > 0) {
-            ImgPls.setC(channel);
-            ImgPls.getProcessor().subtract(backgroundValue);
-            BackgroundProcessed[channel - 1] = true;
+        if (backgroundProcessed[channel - 1] == false && backgroundValue > 0) {
+            imagePlus.setC(channel);
+            imagePlus.getProcessor().subtract(backgroundValue);
+            backgroundProcessed[channel - 1] = true;
             return true;
         } else {
             return false;
@@ -73,7 +74,7 @@ public class XImageProcessor {
      * there is none
      */
     public Roi[] obtainROIs() {
-        Overlay oly = ImgPls.getOverlay();
+        Overlay oly = imagePlus.getOverlay();
         Roi[] result;
         if (oly != null) {
             result = oly.toArray();
@@ -87,7 +88,7 @@ public class XImageProcessor {
     }
 
     public int obtainChannelCount() {
-        return ImgPls.getNChannels();
+        return imagePlus.getNChannels();
     }
 
     /**
@@ -100,17 +101,17 @@ public class XImageProcessor {
      * is not line roi
      */
     public double[] obtainIntensityProfile(Roi roi, int channel) {
-        int n = ImgPls.getNChannels();
+        int n = imagePlus.getNChannels();
         if (channel > n || channel < 1) {
             return null;
         } else {
-            ImgPls.setC(channel);
+            imagePlus.setC(channel);
         }
 
         if (roi != null && roi.isLine()) {
-            roi.setStrokeWidth(ROILineWidth);
-            ImgPls.setRoi(roi);
-            ProfilePlot pfp = new ProfilePlot(ImgPls);
+            roi.setStrokeWidth(roiLineWidth);
+            imagePlus.setRoi(roi);
+            ProfilePlot pfp = new ProfilePlot(imagePlus);
             return pfp.getProfile();
         } else {
             return null;
@@ -134,10 +135,10 @@ public class XImageProcessor {
 
     public void saveROIs(Roi[] rois, String fileName) {
         for (Roi roi : rois) {
-            ImageOverlay.add(roi);
+            imageOverlay.add(roi);
         }
-        ImgPls.setOverlay(ImageOverlay);
-        FileSaver fs = new FileSaver(ImgPls);
+        originalImp.setOverlay(imageOverlay);
+        FileSaver fs = new FileSaver(originalImp);
 
         String ext = "";
         int i = fileName.lastIndexOf('.');

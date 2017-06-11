@@ -1,42 +1,69 @@
+/**
+ *
+ * @author Xiao zhou
+ *
+ * This package "AiSpindle" utilizes the following packages to automatically
+ * identify Xenopus laevis spindles from images.
+ *
+ * ImageJ and several of its extensions: ij-blob: https://imagej.net/IJ_Blob
+ * Shape Smoothing: http://imagej.net/Shape_Smoothing which uses JTransforms:
+ * https://github.com/wendykierp/JTransforms
+ * VIB TubenessProcessor:http://imagej.net/VIB_Protocol
+ * Directionality: https://imagej.net/Directionality
+ *
+ * License GPL3.
+ *
+ */
 package AiSpindle;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.plugin.filter.GaussianBlur;
+import ij.plugin.filter.RankFilters;
 import ij.process.ImageConverter;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Xiao zhou
- */
 public class SpindleIdentifier {
 
     private final List<SpindleContourAnalyzer> spindles;
     private final ImagePlus mtImp;
     private final ImagePlus dnaImp;
 
+    /**
+     *
+     * @param imagePlus imagePlus need to be processed
+     * @param mtChannel the microtubule channel number in the imagePlus
+     * @param dnaChannel the dna Channel number in the imagePlus
+     */
     public SpindleIdentifier(ImagePlus imagePlus, int mtChannel, int dnaChannel) {
         spindles = new ArrayList<>();
         ImageStack imageStack = imagePlus.getImageStack();
         mtImp = new ImagePlus("mt", imageStack.getProcessor(mtChannel));
         dnaImp = new ImagePlus("dna", imageStack.getProcessor(dnaChannel));
-        
+
+        new RankFilters().rank(mtImp.getChannelProcessor(), 3, RankFilters.MEDIAN);
+        mtImp.resetDisplayRange();//if not reset the ImageConverter will convert according to the display range.
         new ImageConverter(mtImp).convertToGray8();
-        RubberBandBaseLineCorrecter.CorrectBaseline(mtImp.getProcessor());
-        new GaussianBlur().blurGaussian(mtImp.getChannelProcessor(), 2);      
+        //RubberBandBaseLineCorrecter.CorrectBaseline(mtImp.getProcessor());
+
+        new RankFilters().rank(dnaImp.getChannelProcessor(), 3, RankFilters.MEDIAN);
+        dnaImp.resetDisplayRange();//if not reset the ImageConverter will not function properly (do not why).
         new ImageConverter(dnaImp).convertToGray8();
-        RubberBandBaseLineCorrecter.CorrectBaseline(dnaImp.getProcessor());
-        new GaussianBlur().blurGaussian(dnaImp.getChannelProcessor(), 2);
+        //RubberBandBaseLineCorrecter.CorrectBaseline(dnaImp.getProcessor());
 
         MicrotubuleBlobs mb = new MicrotubuleBlobs(mtImp);
         DNABlobs db = new DNABlobs(dnaImp);
-
         pairMicrotubuleAndDNA(mb.getOuterContour(), db.getOuterContour());
     }
 
+    /**
+     *
+     * @return a List of SpindleContourAnalyzer which contains the microtubule
+     * contours and DNA contours
+     */
     public List<SpindleContourAnalyzer> getSpindles() {
         return spindles;
     }
@@ -75,7 +102,7 @@ public class SpindleIdentifier {
                 for (Polygon pg : mtComboList) {
                     mtPolygons.remove(pg);
                 }
-                
+
                 spindles.add(new SpindleContourAnalyzer(mtComboList, dnaComboList, mtImp, dnaImp));
 
             }

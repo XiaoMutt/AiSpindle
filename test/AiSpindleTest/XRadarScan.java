@@ -16,6 +16,7 @@ import ij.gui.Roi;
 /**
  *
  * @author Xiao Zhou
+ * Run the main to test AiSpindle on a image.
  */
 public class XRadarScan {
 
@@ -35,7 +36,7 @@ public class XRadarScan {
         String file_name = od.getPath();
         CompositeImage imp = new CompositeImage(new ImagePlus(file_name));
 
-        SpindleIdentifier si = new SpindleIdentifier(imp, 2, 1);
+        SpindleIdentifier si = new SpindleIdentifier(imp, 3, 1);
         Overlay overlay = new Overlay();
         for (SpindleContourAnalyzer b : si.getSpindles()) {
            // Point[] points = b.getSpindleLongAxisPoints();
