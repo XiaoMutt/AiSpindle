@@ -8,12 +8,14 @@ import ij.process.FloatProcessor;
 
 /**
  *
- * @author Mutt
+ * @author Johannes Schindelin, Jan Eglinger, Mark Hiner see
+ * https://imagej.net/Directionality edited by Xiao Zhou
+ *
  */
 public class DirectionDetector {
 
     private static final TubenessProcessor TP = new TubenessProcessor(0.9, true);
-    
+
     private static final int NBINS = 90;//number of bins in the direction histogram;
 
     public static DirecionAnalysisResult calculateDirection(ImagePlus imagePlus) {
@@ -119,16 +121,14 @@ public class DirectionDetector {
         }
         params[3] = Math.abs(params[3]); // std is positive
 
-        
-
         double[] analysis = new double[3];
-        
+
         /* no use for amount;
         double amount = 0;
         for (int j = 0; j < dir.length; j++) {
             amount += dir[j];
         }
-        */
+         */
         analysis[0] = params[2];//center
         analysis[1] = params[3];//standard derivation
         analysis[2] = fitter.getFitGoodness();//goodness of fit
