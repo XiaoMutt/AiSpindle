@@ -1,5 +1,5 @@
 /*
- *
+ * GPLv3
  */
 package AiSpindle;
 

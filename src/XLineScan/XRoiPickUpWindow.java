@@ -1,3 +1,7 @@
+/*
+ * GPLv3
+ */
+
 package XLineScan;
 
 import AiSpindle.PointPair;

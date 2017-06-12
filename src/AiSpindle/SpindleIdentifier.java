@@ -11,15 +11,13 @@
  * VIB TubenessProcessor:http://imagej.net/VIB_Protocol
  * Directionality: https://imagej.net/Directionality
  *
- * License GPL3.
  *
+ * GPLv3
  */
 package AiSpindle;
 
-import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
-import ij.plugin.filter.GaussianBlur;
 import ij.plugin.filter.RankFilters;
 import ij.process.ImageConverter;
 import java.awt.Polygon;

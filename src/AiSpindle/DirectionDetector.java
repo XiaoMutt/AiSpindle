@@ -1,3 +1,6 @@
+/*
+ * GPLv3
+ */
 package AiSpindle;
 
 import features.TubenessProcessor;

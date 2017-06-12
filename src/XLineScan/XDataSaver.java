@@ -1,6 +1,5 @@
 /*
- * Here comes the text of your license
- * Each line should be prefixed with  *
+ * GPLv3
  */
 package XLineScan;
 
@@ -14,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
- * @author Mutt
+ * @author Xiao Zhou
  */
 public class XDataSaver {
 

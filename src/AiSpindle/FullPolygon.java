@@ -1,3 +1,6 @@
+/*
+ * GPLv3
+ */
 /**
  * @author Xiao Zhou
  */

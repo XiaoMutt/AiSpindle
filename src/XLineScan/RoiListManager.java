@@ -1,6 +1,5 @@
 /*
- * Here comes the text of your license
- * Each line should be prefixed with  * 
+ * GPLv3
  */
 package XLineScan;
 

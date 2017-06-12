@@ -1,12 +1,12 @@
+/*
+ * GPLv3
+ */
 package XLineScan;
 
 import ij.IJ;
 import ij.ImageJ;
-import ij.gui.Roi;
 import ij.io.DirectoryChooser;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**

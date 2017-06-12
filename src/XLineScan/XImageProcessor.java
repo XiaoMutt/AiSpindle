@@ -1,3 +1,7 @@
+/*
+ * GPLv3
+ */
+
 package XLineScan;
 
 import ij.ImagePlus;
@@ -8,14 +12,8 @@ import ij.gui.Roi;
 import ij.io.FileSaver;
 import ij.plugin.filter.BackgroundSubtracter;
 
-/*
- * Here comes the text of your license
- * Each line should be prefixed with  * 
- */
 /**
  * Process images using IJ class methods:
- * <li>Length
- * <li>Intensity Profile
  *
  * @author Xiao Zhou
  */
