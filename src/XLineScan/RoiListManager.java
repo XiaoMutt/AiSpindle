@@ -28,7 +28,6 @@ public class RoiListManager extends javax.swing.JFrame {
      * Creates new form RoiListManager
      *
      * @param imageWindow
-     * @param pickedRois
      */
     public RoiListManager(XRoiPickUpWindow imageWindow) {
         initComponents();
